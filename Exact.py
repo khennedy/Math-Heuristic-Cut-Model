@@ -1,9 +1,9 @@
 import pulp as solver
 from pulp import *
 import time
-
+import gc
 z = 0
-solvers = [solver.CPLEX(), solver.GLPK(), solver.GUROBI(), solver.PULP_CBC_CMD(), solver.COIN()]
+solvers = [solver.CPLEX(timeLimit=600), solver.GLPK(), solver.GUROBI(), solver.PULP_CBC_CMD(), solver.COIN()]
 solverUsado = 0
 
 def solver_exact(g, init, final, is_first, is_last, name):
@@ -60,4 +60,10 @@ def solver_exact(g, init, final, is_first, is_last, name):
     #g.plotCuts(nome.replace(".txt",""))
     #g.plotCor(nome.replace(".txt",""))
     #g.plotDesloc(valuesOr,nome.replace(".txt",""))
-    return solver.value(problem.objective),valuesOr
+    fo = solver.value(problem.objective)
+    del problem
+    del X
+    del Y
+    del g
+    gc.collect()
+    return fo,valuesOr
