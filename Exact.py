@@ -3,7 +3,7 @@ from pulp import *
 import time
 import gc
 z = 0
-solvers = [solver.CPLEX(timeLimit=600), solver.GLPK(), solver.GUROBI(), solver.PULP_CBC_CMD(), solver.COIN()]
+solvers = [solver.CPLEX(timeLimit=30), solver.GLPK(), solver.GUROBI(), solver.PULP_CBC_CMD(), solver.COIN()]
 solverUsado = 0
 
 def solver_exact(g, init, final, is_first, is_last, name):

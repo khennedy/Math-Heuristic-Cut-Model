@@ -59,6 +59,7 @@ def signal_handler(signum, frame):
 problems_packing = ["Instances/packing/"+i for i in os.listdir("Instances/packing/")]
 problems_sep = ["Instances/separated/"+i for i in os.listdir("Instances/separated/")]
 problems = problems_packing + problems_sep
+problems = problems[:4]
 for ptk in problems:
     g = Graph.Graph(16.67,400,5)
     g.initProblem(ptk)
@@ -181,14 +182,14 @@ for ptk in problems:
                     cluster_sol.append(sol)
                 count = 0
                 vis = []
-                for i in range(len(cluster_sol)):
-                    for j in range(len(cluster_sol[i])):
-                        if cluster_sol[i][j] != None:
-                            s = int(cluster_sol[i][j].split(',')[0])
-                            f = int(cluster_sol[i][j].split(',')[1])
-                            plt.quiver(obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(s)-1][1],obj_graphs[i].points[int(f)-1][0]-obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(f)-1][1]-obj_graphs[i].points[int(s)-1][1], scale_units='xy', angles='xy', scale=1,color=cores[i])
-                            plt.text((obj_graphs[i].points[s-1][0]+obj_graphs[i].points[f-1][0])/2,(obj_graphs[i].points[s-1][1]+obj_graphs[i].points[f-1][1])/2,str(count)+" C: "+str(i))
-                            count += 1
+                #for i in range(len(cluster_sol)):
+                 #   for j in range(len(cluster_sol[i])):
+                  #      if cluster_sol[i][j] != None:
+                   #         s = int(cluster_sol[i][j].split(',')[0])
+                    #        f = int(cluster_sol[i][j].split(',')[1])
+                     #       plt.quiver(obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(s)-1][1],obj_graphs[i].points[int(f)-1][0]-obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(f)-1][1]-obj_graphs[i].points[int(s)-1][1], scale_units='xy', angles='xy', scale=1,color=cores[i])
+                      #      plt.text((obj_graphs[i].points[s-1][0]+obj_graphs[i].points[f-1][0])/2,(obj_graphs[i].points[s-1][1]+obj_graphs[i].points[f-1][1])/2,str(count)+" C: "+str(i))
+                       #     count += 1
                 
                 for i in range(len(min_bet_graph_values)-1):
                     fo += min_bet_graph_values[i][i+1]/400
@@ -205,12 +206,21 @@ for ptk in problems:
                 #plt.title("Time Required: {:.2f}".format(fo))
                 #plt.savefig("Images/"+ptk+".jpg",dpi=300)
                 #plt.close()    
-            except:
+            except Exception as e:
+                print(e)
                 list_fo.append(float('inf'))
                 list_k.append(n_grupos)
         save_str = "problem: "+ptk+" FO: "+str(min(list_fo)) + " k_value: "+str(list_k[list_fo.index(min(list_fo))])
         tempos = open("tempos.txt","a+")
         tempos.writelines(save_str+"\n")
         tempos.close()
-    except:
+    except Exception as e:
+        print(e)
+        try:
+            save_str = "problem" + ptk + "FO: "+str(min(list_fo)) + "k_value: "+str(list_k[list_fo.index(min(list_fo))])
+            tempos = open("tempos.txt","a+")
+            tempos.writelines(save_str+"\n")
+            tempos.close()
+        except:
+            pass
         pass
