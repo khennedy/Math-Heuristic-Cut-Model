@@ -59,7 +59,7 @@ def signal_handler(signum, frame):
 problems_packing = ["Instances/packing/"+i for i in os.listdir("Instances/packing/")]
 problems_sep = ["Instances/separated/"+i for i in os.listdir("Instances/separated/")]
 problems = problems_packing + problems_sep
-problems = problems[:4]
+problems = problems[4:]
 for ptk in problems:
     g = Graph.Graph(16.67,400,5)
     g.initProblem(ptk)
@@ -210,14 +210,14 @@ for ptk in problems:
                 print(e)
                 list_fo.append(float('inf'))
                 list_k.append(n_grupos)
-        save_str = "problem: "+ptk+" FO: "+str(min(list_fo)) + " k_value: "+str(list_k[list_fo.index(min(list_fo))])
+        save_str = "problem: "+ptk+" FO: "+str(list_fo) + " k_value: "+str(list_k)
         tempos = open("tempos.txt","a+")
         tempos.writelines(save_str+"\n")
         tempos.close()
     except Exception as e:
         print(e)
         try:
-            save_str = "problem" + ptk + "FO: "+str(min(list_fo)) + "k_value: "+str(list_k[list_fo.index(min(list_fo))])
+            save_str = "problem" + ptk + "FO: "+str(list_fo) + "k_value: "+str(list_k)
             tempos = open("tempos.txt","a+")
             tempos.writelines(save_str+"\n")
             tempos.close()
