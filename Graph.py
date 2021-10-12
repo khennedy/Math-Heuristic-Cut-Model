@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 class Graph():
-    def __init__(self,mi, pi, z):
+    def __init__(self,mi, pi, z = -1):
         self.vertices = dict()
         self.edge = [] # All edges of graph
         self.edgeCuts = [] # Only edges to cut

@@ -6,9 +6,7 @@ import Graph
 import Exact
 import random
 import os
-import signal
 import gc
-
 
 def greedy_min_path(min_bet_graph_values, vis):
     for i in tqdm(range(len(new_graphs)-1),desc="Greddy min path"):
@@ -53,32 +51,28 @@ def shortest_clusters_origin(new_graphs_v, g):
                 m = (ponto[0]**2 + ponto[1]**2)**1/2
                 index = i
     return index
-def signal_handler(signum, frame):
-    raise Exception("Timed out!")
-    
+
 problems_packing = ["Instances/packing/"+i for i in os.listdir("Instances/packing/")]
 problems_sep = ["Instances/separated/"+i for i in os.listdir("Instances/separated/")]
 problems = problems_packing + problems_sep
-problems = problems[4:]
+problems = problems[13:14]
 for ptk in problems:
-    g = Graph.Graph(16.67,400,5)
+    g = Graph.Graph(16.67,400)
     g.initProblem(ptk)
     g.z = len(g.edgeCuts)*2
 
     list_fo = []
     list_k = []
-    signal.signal(signal.SIGALRM, signal_handler)
-    signal.alarm(7200)
     try:
-        for n_grupos in range(len(g.edgeCuts),2,-1):
-            signal.signal(signal.SIGALRM, signal_handler)
-            signal.alarm(600)
+        for n_grupos in range(len(g.edge),2,-1):
+
             try:    
                 
                 points = []
                 
                 mapa = dict()
                 for i in g.edgeCuts:
+                    
                     init = int(i.split(",")[0])
                     final = int(i.split(",")[1])
                     p1 = g.points[init-1]
@@ -182,14 +176,14 @@ for ptk in problems:
                     cluster_sol.append(sol)
                 count = 0
                 vis = []
-                #for i in range(len(cluster_sol)):
-                 #   for j in range(len(cluster_sol[i])):
-                  #      if cluster_sol[i][j] != None:
-                   #         s = int(cluster_sol[i][j].split(',')[0])
-                    #        f = int(cluster_sol[i][j].split(',')[1])
-                     #       plt.quiver(obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(s)-1][1],obj_graphs[i].points[int(f)-1][0]-obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(f)-1][1]-obj_graphs[i].points[int(s)-1][1], scale_units='xy', angles='xy', scale=1,color=cores[i])
-                      #      plt.text((obj_graphs[i].points[s-1][0]+obj_graphs[i].points[f-1][0])/2,(obj_graphs[i].points[s-1][1]+obj_graphs[i].points[f-1][1])/2,str(count)+" C: "+str(i))
-                       #     count += 1
+                for i in range(len(cluster_sol)):
+                    for j in range(len(cluster_sol[i])):
+                        if cluster_sol[i][j] != None:
+                            s = int(cluster_sol[i][j].split(',')[0])
+                            f = int(cluster_sol[i][j].split(',')[1])
+                            plt.quiver(obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(s)-1][1],obj_graphs[i].points[int(f)-1][0]-obj_graphs[i].points[int(s)-1][0],obj_graphs[i].points[int(f)-1][1]-obj_graphs[i].points[int(s)-1][1], scale_units='xy', angles='xy', scale=1,color=cores[i])
+                            plt.text((obj_graphs[i].points[s-1][0]+obj_graphs[i].points[f-1][0])/2,(obj_graphs[i].points[s-1][1]+obj_graphs[i].points[f-1][1])/2,str(count)+" C: "+str(i))
+                            count += 1
                 
                 for i in range(len(min_bet_graph_values)-1):
                     fo += min_bet_graph_values[i][i+1]/400
@@ -202,10 +196,12 @@ for ptk in problems:
                 del c
                 del min_bet_graph
                 gc.collect()
-                #print("Final FO value ",fo)
-                #plt.title("Time Required: {:.2f}".format(fo))
-                #plt.savefig("Images/"+ptk+".jpg",dpi=300)
-                #plt.close()    
+                print("Final FO value ",fo)
+                plt.title("Time Required: {:.2f}".format(fo))
+                plt.savefig("Images/"+str(n_clusters)+"Teste.jpg",dpi=300)
+
+                plt.close()    
+                
             except Exception as e:
                 print(e)
                 list_fo.append(float('inf'))

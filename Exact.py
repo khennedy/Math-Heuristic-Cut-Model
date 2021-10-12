@@ -4,15 +4,15 @@ import time
 import gc
 z = 0
 solvers = [solver.CPLEX(timeLimit=30), solver.GLPK(), solver.GUROBI(), solver.PULP_CBC_CMD(), solver.COIN()]
-solverUsado = 0
+solverUsado = 3
 
 def solver_exact(g, init, final, is_first, is_last, name):
-
     var = [(i+','+str(t)) for i in g.edge for t in range(1,g.z)]
     var2 = [(str(i)+','+str(t)) for i in g.vertices for t in range(1,g.z)]
+    
     X = solver.LpVariable.dicts("X",var,cat=solver.LpBinary)
     Y = solver.LpVariable.dicts("Y",var2,cat=solver.LpBinary)
-    problem = solver.LpProblem("The best Cut" , solver.LpMinimize)
+    problem = solver.LpProblem("The_best_Cut" , solver.LpMinimize)
     if is_first:
         problem += (solver.lpSum(X.get(str(i.split(',')[0])+','+str(i.split(',')[1])+','+str(t))*g.mis[i.split(',')[0]][i.split(',')[1]] for i in g.edge for t in range(1,g.z)) + 
                     solver.lpSum(((g.pis[k.split(',')[0]][k.split(',')[1]]))-(
@@ -56,10 +56,10 @@ def solver_exact(g, init, final, is_first, is_last, name):
         cut = i.name.split(',')[0].split('_')[1]+','+i.name.split(',')[1]
         valuesOr[ind-1] = cut
 
-    #g.plotSoluation(valuesOr,nome.replace(".txt",""))
-    #g.plotCuts(nome.replace(".txt",""))
-    #g.plotCor(nome.replace(".txt",""))
-    #g.plotDesloc(valuesOr,nome.replace(".txt",""))
+    #g.plotSoluation(valuesOr,name)
+    #g.plotCuts(name)
+    #g.plotCor(name)
+    #g.plotDesloc(valuesOr,name)
     fo = solver.value(problem.objective)
     del problem
     del X
